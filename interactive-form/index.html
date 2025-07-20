@@ -1,0 +1,161 @@
+<!-- Codveda Internship Submission
+Task 2: Interactive Form with Validation
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      background-color: #2b2d42;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #1a1e2b;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <h2>Register</h2>
+    <form id="userForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" required />
+        <div class="error" id="nameError">Name is required.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required />
+        <div class="error" id="emailError">Enter a valid email address.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" required />
+        <div class="error" id="phoneError">Enter a valid 10-digit phone number.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+        <div class="error" id="passwordError">Password must be at least 8 characters with one special character.</div>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("userForm");
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const phone = document.getElementById("phone");
+    const password = document.getElementById("password");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const phoneError = document.getElementById("phoneError");
+    const passwordError = document.getElementById("passwordError");
+
+    function showError(input, errorDiv, condition) {
+      if (!condition) {
+        errorDiv.style.display = "block";
+        return true;
+      } else {
+        errorDiv.style.display = "none";
+        return false;
+      }
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let hasError = false;
+
+      hasError |= showError(name, nameError, name.value.trim() !== "");
+      hasError |= showError(email, emailError, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value));
+      hasError |= showError(phone, phoneError, /^\d{10}$/.test(phone.value));
+      hasError |= showError(password, passwordError, /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(password.value));
+
+      if (!hasError) {
+        alert("Form submitted successfully!");
+        form.reset();
+      }
+    });
+
+    [name, email, phone, password].forEach((field, index) => {
+      const errors = [nameError, emailError, phoneError, passwordError];
+      field.addEventListener("blur", () => {
+        const validityChecks = [
+          name.value.trim() !== "",
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value),
+          /^\d{10}$/.test(phone.value),
+          /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(password.value)
+        ];
+        showError(field, errors[index], validityChecks[index]);
+      });
+    });
+  </script>
+</body>
+
+</html>
